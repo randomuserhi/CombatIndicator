@@ -7,7 +7,7 @@ namespace CombatIndicator
     {
         static ConfigManager()
         {
-            string text = Path.Combine(Paths.ConfigPath, "KillIndicatorFix.cfg");
+            string text = Path.Combine(Paths.ConfigPath, "CombatIndicator.cfg");
             ConfigFile configFile = new ConfigFile(text, true);
 
             debug = configFile.Bind(
