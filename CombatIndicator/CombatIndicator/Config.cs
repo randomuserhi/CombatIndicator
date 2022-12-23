@@ -26,6 +26,7 @@ namespace CombatIndicator
         public static bool Debug
         {
             get { return debug.Value; }
+            set { debug.Value = value; }
         }
         public static bool Enabled
         {

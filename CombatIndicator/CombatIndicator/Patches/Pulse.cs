@@ -13,11 +13,16 @@ namespace CombatIndicator.Patches
         public static bool DoSendChatMessage_Prefix(PlayerChatManager __instance, PlayerChatManager.pChatMessage data)
         {
             if (ConfigManager.Debug) APILogger.Debug(Module.Name, $"Sent message {data.message.data}");
-            if (data.message.data == ".toggle")
+            switch (data.message.data)
             {
-                ConfigManager.Enabled = !ConfigManager.Enabled;
-                APILogger.Debug(Module.Name, $"Set Enabled to {ConfigManager.Enabled}");
-                return false;
+                case ".toggle":
+                    ConfigManager.Enabled = !ConfigManager.Enabled;
+                    APILogger.Debug(Module.Name, $"Set Enabled to {ConfigManager.Enabled}");
+                    return false;
+                case ".debug":
+                    ConfigManager.Debug = !ConfigManager.Debug;
+                    APILogger.Debug(Module.Name, $"Set Debug to {ConfigManager.Debug}");
+                    return false;
             }
             return true;
         }
