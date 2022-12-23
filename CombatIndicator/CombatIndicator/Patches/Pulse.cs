@@ -10,7 +10,25 @@ namespace CombatIndicator.Patches
         [HarmonyPostfix]
         public static void Initialize_Postfix(PUI_LocalPlayerStatus __instance)
         {
-            __instance.m_pulseText.text += $" | " + (DramaManager.CurrentStateEnum == DRAMA_State.Combat ? "In Combat" : "Out of Combat"); 
+            string state = "Out of Combat";
+            switch(DramaManager.CurrentStateEnum)
+            {
+                case DRAMA_State.Encounter:
+                    // Removed due to desync with client
+                    //state = "In Encounter";
+                    //break;
+
+                case DRAMA_State.Survival: // Unsure if this is correct - Assumed to be when you teleport between Alpha zones
+                case DRAMA_State.IntentionalCombat:
+                case DRAMA_State.Combat:
+                    state = "In Combat";
+                    break;
+            }
+
+            __instance.m_pulseText.text += $" | " + state;
+#if DEBUG
+            __instance.m_pulseText.text += $" ({DramaManager.CurrentStateEnum.ToString()})";
+#endif
         }
     }
 }

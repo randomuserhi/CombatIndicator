@@ -5,7 +5,6 @@ using Il2CppInterop.Runtime.Injection;
 using API;
 
 using UnityEngine;
-using System.ComponentModel;
 
 namespace CombatIndicator;
 
@@ -13,7 +12,7 @@ public static class Module
 {
     public const string GUID = "randomuserbruh.CombatIndicator";
     public const string Name = "CombatIndicator";
-    public const string Version = "0.0.1";
+    public const string Version = "0.0.2";
 }
 
 [BepInPlugin(Module.GUID, Module.Name, Module.Version)]
