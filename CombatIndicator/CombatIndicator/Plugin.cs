@@ -26,14 +26,15 @@ public class Plugin : BasePlugin
     public override void Load()
     {
         APILogger.Debug(Module.Name, "Plugin is loaded!");
+        harmony = new Harmony(Module.GUID);
+        harmony.PatchAll();
 
 #if CURSOR
         ClassInjector.RegisterTypeInIl2Cpp<Behaviour>();
         RundownManager.add_OnExpeditionGameplayStarted((Action)OnGameplayStart);
 #endif
 
-        harmony = new Harmony(Module.GUID);
-        harmony.PatchAll();
+        APILogger.Debug(Module.Name, "Debug is " + (ConfigManager.Debug ? "Enabled" : "Disabled"));
     }
 
     private static Harmony harmony;

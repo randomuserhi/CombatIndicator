@@ -1,15 +1,34 @@
-﻿using HarmonyLib;
+﻿using API;
+using HarmonyLib;
+using Player;
+using SNetwork;
 
 namespace CombatIndicator.Patches
 {
-    [HarmonyPatch(typeof(PUI_LocalPlayerStatus))]
+    [HarmonyPatch]
     internal class Pulse_Patches
     {
-        [HarmonyPatch(nameof(PUI_LocalPlayerStatus.UpdateBPM))]
+        [HarmonyPatch(typeof(PlayerChatManager), nameof(PlayerChatManager.DoSendChatMessage))]
+        [HarmonyPrefix]
+        public static bool DoSendChatMessage_Prefix(PlayerChatManager __instance, PlayerChatManager.pChatMessage data)
+        {
+            if (ConfigManager.Debug) APILogger.Debug(Module.Name, $"Sent message {data.message.data}");
+            if (data.message.data == ".toggle")
+            {
+                ConfigManager.Enabled = !ConfigManager.Enabled;
+                APILogger.Debug(Module.Name, $"Set Enabled to {ConfigManager.Enabled}");
+                return false;
+            }
+            return true;
+        }
+
+        [HarmonyPatch(typeof(PUI_LocalPlayerStatus), nameof(PUI_LocalPlayerStatus.UpdateBPM))]
         [HarmonyWrapSafe]
         [HarmonyPostfix]
         public static void Initialize_Postfix(PUI_LocalPlayerStatus __instance)
         {
+            if (!ConfigManager.Enabled) return;
+
             string state = "Out of Combat";
             switch(DramaManager.CurrentStateEnum)
             {
@@ -26,9 +45,7 @@ namespace CombatIndicator.Patches
             }
 
             __instance.m_pulseText.text += $" | " + state;
-#if DEBUG
-            __instance.m_pulseText.text += $" ({DramaManager.CurrentStateEnum.ToString()})";
-#endif
+            if (ConfigManager.Debug) __instance.m_pulseText.text += $" ({DramaManager.CurrentStateEnum.ToString()})";
         }
     }
 }

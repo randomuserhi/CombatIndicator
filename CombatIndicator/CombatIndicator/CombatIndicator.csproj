@@ -1,25 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
-
-		<!--
-		Use the following property to set your preferred r2modman profile
-		-->
-		<Profile>Default</Profile>
-
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Nullable>enable</Nullable>
 		<DebugType>None</DebugType>
 		<AssemblyName>$(SolutionName)</AssemblyName>
 		<RootNamespace>$(SolutionName)</RootNamespace>
-		<BepInEx>C:\Users\maxim\Desktop\BepInExPack_GTFO\BepInEx</BepInEx>
-		<BuildDirectory>$(BepInEx)\plugins\$(SolutionName)\</BuildDirectory>
+		<!-- Bepinex file location -->
+		<BepInEx>E:\GTFO mods\BepInEx\BepInExPack_GTFO\BepInEx</BepInEx>
+		<BuildDirectory>E:\GTFO mods\BepInEx\Plugins\$(SolutionName)\</BuildDirectory>
 		<OutputPath>$(BuildDirectory)</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	</PropertyGroup>
+
 	<Target Name="PostBuild" BeforeTargets="PostBuildEvent">
 		<Delete Files="$(OutputPath)$(AssemblyName).deps.json" />
 	</Target>
+
 	<ItemGroup>
 		<Reference Include="$(BepInEx)\core\0Harmony.dll" Private="false" />
 		<Reference Include="$(BepInEx)\core\BepInEx.Core.dll" Private="false" />
@@ -29,4 +28,5 @@
 		<Reference Include="$(BepInEx)\interop\*.dll" Private="false" />
 		<Reference Remove="$(BepInEx)\interop\netstandard.dll" />
 	</ItemGroup>
+
 </Project>

@@ -1,4 +1,5 @@
-﻿using API;
+﻿#if CURSOR
+using API;
 using UnityEngine;
 
 namespace CombatIndicator
@@ -32,3 +33,4 @@ namespace CombatIndicator
         }
     }
 }
+#endif
