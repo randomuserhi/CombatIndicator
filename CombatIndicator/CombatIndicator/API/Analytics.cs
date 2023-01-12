@@ -3,7 +3,7 @@
 using GameData;
 using UnityEngine.Analytics;
 
-namespace CombatIndicator.Patches
+namespace API
 {
     [HarmonyPatch(typeof(GameDataInit))]
     internal class GameDataInit_Patches

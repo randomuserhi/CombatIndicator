@@ -1,32 +1,11 @@
 ﻿using API;
 using HarmonyLib;
-using Player;
-using SNetwork;
 
 namespace CombatIndicator.Patches
 {
     [HarmonyPatch]
     internal class Pulse_Patches
     {
-        [HarmonyPatch(typeof(PlayerChatManager), nameof(PlayerChatManager.DoSendChatMessage))]
-        [HarmonyPrefix]
-        public static bool DoSendChatMessage_Prefix(PlayerChatManager __instance, PlayerChatManager.pChatMessage data)
-        {
-            if (ConfigManager.Debug) APILogger.Debug(Module.Name, $"Sent message {data.message.data}");
-            switch (data.message.data)
-            {
-                case ".toggle":
-                    ConfigManager.Enabled = !ConfigManager.Enabled;
-                    APILogger.Debug(Module.Name, $"Set Enabled to {ConfigManager.Enabled}");
-                    return false;
-                case ".debug":
-                    ConfigManager.Debug = !ConfigManager.Debug;
-                    APILogger.Debug(Module.Name, $"Set Debug to {ConfigManager.Debug}");
-                    return false;
-            }
-            return true;
-        }
-
         [HarmonyPatch(typeof(PUI_LocalPlayerStatus), nameof(PUI_LocalPlayerStatus.UpdateBPM))]
         [HarmonyWrapSafe]
         [HarmonyPostfix]

@@ -1,10 +1,9 @@
 ﻿using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
-using Il2CppInterop.Runtime.Injection;
 using API;
 
-using UnityEngine;
+using BetterChat;
 
 namespace CombatIndicator;
 
@@ -16,6 +15,7 @@ public static class Module
 }
 
 [BepInPlugin(Module.GUID, Module.Name, Module.Version)]
+[BepInDependency(BetterChatGUID, BepInDependency.DependencyFlags.SoftDependency)]
 public class Plugin : BasePlugin
 {
 #if CURSOR
@@ -23,11 +23,49 @@ public class Plugin : BasePlugin
     private static Behaviour instance = null;
 #endif
 
+    const string BetterChatGUID = "randomuserhi.BetterChat";
+
     public override void Load()
     {
         APILogger.Debug(Module.Name, "Plugin is loaded!");
         harmony = new Harmony(Module.GUID);
         harmony.PatchAll();
+
+        if (IL2CPPChainloader.Instance.Plugins.TryGetValue(BetterChatGUID, out _))
+        {
+            APILogger.Debug(Module.Name, "BetterChat is installed, adding commands.");
+
+            ChatLogger.root.AddCommand("CombatIndicator/", null);
+            ChatLogger.root.AddCommand("CombatIndicator/Enabled", new ChatLogger.Command()
+            {
+                action = (ChatLogger.CmdNode n, ChatLogger.Command cmd, string[] args) =>
+                {
+                    if (args.Length == 0)
+                    {
+                        n.Debug(cmd.help);
+                        return;
+                    }
+                    int value;
+                    if (int.TryParse(args[0], out value))
+                    {
+                        if (value != 0 && value != 1)
+                        {
+                            n.Debug(cmd.help);
+                            return;
+                        }
+                        ConfigManager.Enabled = value == 1;
+                        n.Debug($"Enabled set to {(ConfigManager.Enabled ? "True" : "False")}");
+                    }
+                    else
+                    {
+                        n.Debug(cmd.help);
+                        return;
+                    }
+                },
+                description = "1 for enable, 0 for disable",
+                syntax = "<value>"
+            });
+        }
 
 #if CURSOR
         ClassInjector.RegisterTypeInIl2Cpp<Behaviour>();
@@ -37,7 +75,7 @@ public class Plugin : BasePlugin
         APILogger.Debug(Module.Name, "Debug is " + (ConfigManager.Debug ? "Enabled" : "Disabled"));
     }
 
-    private static Harmony harmony;
+    private static Harmony? harmony;
 
 #if CURSOR
     [HarmonyPatch(typeof(RundownManager))]

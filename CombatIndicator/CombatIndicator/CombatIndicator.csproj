@@ -10,6 +10,7 @@
 		<RootNamespace>$(SolutionName)</RootNamespace>
 		<!-- Bepinex file location -->
 		<BepInEx>E:\GTFO mods\BepInEx\BepInExPack_GTFO\BepInEx</BepInEx>
+		<AdditionalIncludes>E:\GTFO mods\BepInEx\Plugins</AdditionalIncludes>
 		<BuildDirectory>E:\GTFO mods\BepInEx\Plugins\$(SolutionName)\</BuildDirectory>
 		<OutputPath>$(BuildDirectory)</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -20,6 +21,7 @@
 	</Target>
 
 	<ItemGroup>
+		<Reference Include="$(AdditionalIncludes)\BetterChat\BetterChat.dll" Private="false" />
 		<Reference Include="$(BepInEx)\core\0Harmony.dll" Private="false" />
 		<Reference Include="$(BepInEx)\core\BepInEx.Core.dll" Private="false" />
 		<Reference Include="$(BepInEx)\core\BepInEx.Unity.IL2CPP.dll" Private="false" />

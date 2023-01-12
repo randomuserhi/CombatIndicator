@@ -3,7 +3,6 @@
 namespace API
 {
     /* Ripped from GTFO-API */
-
     internal static class APILogger
     {
         private static readonly ManualLogSource logger;
