@@ -28,8 +28,9 @@ namespace CombatIndicator.Patches
                     break;
             }
 
-            __instance.m_pulseText.text += $" | " + state;
-            if (ConfigManager.Debug) __instance.m_pulseText.text += $" ({DramaManager.CurrentStateEnum.ToString()})";
+            if (ConfigManager.BPM) __instance.m_pulseText.text += $" | {state}";
+            else __instance.m_pulseText.text += $" | {(int)__instance.m_currentBPM}";
+            if (ConfigManager.Debug) __instance.m_pulseText.text += $" ({DramaManager.CurrentStateEnum.ToString()}) | ({__instance.m_currentBPM})";
         }
     }
 }

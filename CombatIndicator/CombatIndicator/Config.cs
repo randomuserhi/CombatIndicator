@@ -21,6 +21,12 @@ namespace CombatIndicator
                 "enabled",
                 true,
                 "Determines if the plugin is enabled or not.");
+
+            bpm = configFile.Bind(
+                "Settings",
+                "bpm",
+                false,
+                "Shows current bpm instead of combat state");
         }
 
         public static bool Debug
@@ -34,7 +40,14 @@ namespace CombatIndicator
             set { enabled.Value = value; }
         }
 
+        public static bool BPM
+        {
+            get { return bpm.Value; }
+            set { bpm.Value = value; }
+        }
+
         private static ConfigEntry<bool> debug;
         private static ConfigEntry<bool> enabled;
+        private static ConfigEntry<bool> bpm;
     }
 }

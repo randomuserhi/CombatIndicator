@@ -65,6 +65,35 @@ public class Plugin : BasePlugin
                 description = "1 for enable, 0 for disable",
                 syntax = "<value>"
             });
+            ChatLogger.root.AddCommand("CombatIndicator/BPM", new ChatLogger.Command()
+            {
+                action = (ChatLogger.CmdNode n, ChatLogger.Command cmd, string[] args) =>
+                {
+                    if (args.Length == 0)
+                    {
+                        n.Debug(cmd.help);
+                        return;
+                    }
+                    int value;
+                    if (int.TryParse(args[0], out value))
+                    {
+                        if (value != 0 && value != 1)
+                        {
+                            n.Debug(cmd.help);
+                            return;
+                        }
+                        ConfigManager.BPM = value == 1;
+                        n.Debug($"BPM set to {(ConfigManager.Enabled ? "True" : "False")}");
+                    }
+                    else
+                    {
+                        n.Debug(cmd.help);
+                        return;
+                    }
+                },
+                description = "1 for BPM, 0 for Combat State",
+                syntax = "<value>"
+            });
         }
 
 #if CURSOR
